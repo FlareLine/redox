@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "redox",
+  "version": "${version}",
+  "name": "Redox",
+  "description": "Redox is a Fabric mod for Minecraft that allows players to experiment with chemistry.",
+  "authors": [
+    "FlareLine"
+  ],
+  "contact": {
+    "homepage": "https://github.com/FlareLine/redox",
+    "issues": "https://github.com/FlareLine/redox/issues",
+    "sources": "https://github.com/FlareLine/redox"
+  },
+  "license": "ISC",
+  "icon": "assets/redox/ixon_x128.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      {
+        "adapter": "kotlin",
+        "value": "com.flareline.redox.Redox"
+      }
+    ]
+  },
+  "mixins": [],
+  "depends": {
+    "fabricloader": ">=0.14.9",
+    "fabric-api": "*",
+    "fabric-language-kotlin": ">=1.8.3+kotlin.1.7.10",
+    "minecraft": "~1.19",
+    "java": ">=17"
+  }
+}
