@@ -1,0 +1,63 @@
+# Automatically build the project and run any configured tests for every push
+# and submitted pull request. This can help catch issues that only occur on
+# certain platforms or language versions, and provides a first line of defence
+# against bad commits.
+
+# Automatically run the release process when a tag is pushed. This will run the
+# regular build steps, but also package up and publish the mod to Modrinth.
+
+name: Workflow
+on: [ pull_request, push ]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        java: [ 17 ]
+        os: [ ubuntu-20.04 ]
+    runs-on: ${{ matrix.os }}
+    if: !startsWith(github.ref, 'refs/tags/')
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Validate Gradle
+        uses: gradle/wrapper-validation-action@v1
+      - name: Setup JDK ${{ matrix.java }}
+        uses: actions/setup-java@v1
+        with:
+          java-version: ${{ matrix.java }}
+      - name: Gradle Wrapper setup
+        run: chmod +x ./gradlew
+      - name: Build
+        run: ./gradlew build
+      - name: Test
+        run: ./gradlew test
+  release:
+    needs: build
+    runs-on: ubuntu-20.04
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Validate Gradle
+        uses: gradle/wrapper-validation-action@v1
+      - name: Setup JDK ${{ matrix.java }}
+        uses: actions/setup-java@v1
+        with:
+          java-version: ${{ matrix.java }}
+      - name: Gradle Wrapper setup
+        run: chmod +x ./gradlew
+      - name: Build
+        run: ./gradlew build
+      - name: Run tests
+        run: ./gradlew test
+      - name: Package
+        run: ./gradlew jar -PmodVersion=${{ github.ref_name }}
+      - name: Modrinth publish
+        env:
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+        run: ./gradlew modrinth
+      - name: Create Github release
+        uses: softprops/action-gh-release@v1
+        with:
+          body: See https://modrinth.com/redox for release details and artifacts.

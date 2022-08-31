@@ -1,8 +1,12 @@
 // Project properties
 // Redox
 val modVersion: String by project
+val modVersionType: String by project
 val mavenGroup: String by project
 val baseName: String by project
+// Modrinth
+val modrinthId: String by project
+val modrinthSlug: String by project
 // Loader
 val minecraftVersion: String by project
 val yarnMappings: String by project
@@ -19,6 +23,7 @@ plugins {
 	id("fabric-loom")
 	val kotlinVersion: String by System.getProperties()
 	kotlin("jvm").version(kotlinVersion)
+	id("com.modrinth.minotaur") version "2.+"
 }
 
 version = modVersion
@@ -51,5 +56,19 @@ tasks {
 		sourceCompatibility = javaVersion
 		targetCompatibility = javaVersion
 		withSourcesJar()
+	}
+	modrinth {
+		projectId.set(modrinthId)
+		versionNumber.set(modVersion)
+		versionType.set(modVersionType)
+		uploadFile.set(jar.get())
+		gameVersions.add(minecraftVersion)
+		loaders.add("fabric")
+		syncBodyFrom.set(project.file("README.md").path)
+		dependencies {
+			build
+			required.project("fabric-api")
+		}
+		token.set(System.getenv("MODRINTH_TOKEN").orEmpty())
 	}
 }
