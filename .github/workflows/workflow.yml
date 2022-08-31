@@ -48,7 +48,7 @@ jobs:
       - name: Run tests
         run: ./gradlew test
       - name: Package
-        run: ./gradlew jar -PmodVersion=${{ github.ref_name }}
+        run: ./gradlew jar -PmodVersion=${GITHUB_REF}
       - name: Modrinth publish
         env:
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
