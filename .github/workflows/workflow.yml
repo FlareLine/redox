@@ -56,4 +56,4 @@ jobs:
       - name: Create Github release
         uses: softprops/action-gh-release@v1
         with:
-          body: See https://modrinth.com/redox for release details and artifacts.
+          body: See https://modrinth.com/mod/redox for release details and artifacts.
