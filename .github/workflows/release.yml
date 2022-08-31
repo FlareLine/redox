@@ -3,8 +3,7 @@
 
 name: Release
 on:
-  release:
-    create:
+  release: [ created ]
 
 jobs:
   release:
