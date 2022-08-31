@@ -13,7 +13,7 @@
     "sources": "https://github.com/FlareLine/redox"
   },
   "license": "ISC",
-  "icon": "assets/redox/ixon_x128.png",
+  "icon": "assets/redox/icon_x128.png",
   "environment": "*",
   "entrypoints": {
     "main": [
@@ -25,10 +25,10 @@
   },
   "mixins": [],
   "depends": {
-    "fabricloader": ">=0.14.9",
-    "fabric-api": "*",
+    "fabricloader": ">=0.14.6",
+    "fabric": "*",
     "fabric-language-kotlin": ">=1.8.3+kotlin.1.7.10",
-    "minecraft": "~1.19",
+    "minecraft": "~1.18.2",
     "java": ">=17"
   }
 }
