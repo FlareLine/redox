@@ -11,29 +11,27 @@ jobs:
   release:
     runs-on: ubuntu-20.04
     steps:
-      - name: Print version
-        run: echo ${{ github.event.release.tag_name }}
-#      - name: Checkout
-#        uses: actions/checkout@v2
-#      - name: Validate Gradle
-#        uses: gradle/wrapper-validation-action@v1
-#      - name: Setup JDK 17
-#        uses: actions/setup-java@v1
-#        with:
-#          java-version: 17
-#      - name: Gradle Wrapper setup
-#        run: chmod +x ./gradlew
-#      - name: Build
-#        run: ./gradlew build
-#      - name: Run tests
-#        run: ./gradlew test
-#      - name: Package
-#        run: ./gradlew jar -PmodVersion="${{ github.event.release.tag_name }}"
-#      - name: Modrinth publish
-#        env:
-#          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
-#        run: ./gradlew modrinth
-#      - name: Create Github release
-#        uses: softprops/action-gh-release@v1
-#        with:
-#          body: See https://modrinth.com/mod/redox for release details and artifacts.
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Validate Gradle
+        uses: gradle/wrapper-validation-action@v1
+      - name: Setup JDK 17
+        uses: actions/setup-java@v1
+        with:
+          java-version: 17
+      - name: Gradle Wrapper setup
+        run: chmod +x ./gradlew
+      - name: Build
+        run: ./gradlew build
+      - name: Run tests
+        run: ./gradlew test
+      - name: Package
+        run: ./gradlew remapJar -PmodVersion="${{ github.event.release.tag_name }}" -PmodVersionType="${{ github.event.release.prerelease && 'beta' || 'release' }}"
+      - name: Modrinth publish
+        env:
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+        run: ./gradlew modrinth
+      - name: Create Github release
+        uses: softprops/action-gh-release@v1
+        with:
+          body: See https://modrinth.com/mod/redox for release details and artifacts.
